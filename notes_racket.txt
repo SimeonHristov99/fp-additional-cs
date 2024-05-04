@@ -1,0 +1,446 @@
+###################################################################################################
+# Hello, Racket
+###################################################################################################
+
+- !! bracket overflow 😄 !!
+- Racket is PREFIX, i.e. first write the procedure and then write its arguments
+- extension for Racket files: .rkt
+- Edit > Preferences > Editing > Racket > put ticks everywhere
+- Edit > Preferences > Editing > General Editing > Enable automatic parenthesis, square brackets, and quotes
+- Shortcuts
+    - `Cntr + Up-arrow` (or `Esc + p`) for using the previous input in interpreter window
+    - `F5` (or `Cntr + F5`) for running the code in the text editor window
+    - `Enter` to run code in the interpreter with caret after last character
+    - `Cntr + Enter` to run code in the interpreter without caret after last character
+    - the two windows are independent, so feel free to test code in the interpreter window even if the code in the text editor window has errors or is incomplete
+- IMPORTANT NOTE: DrRacket DOES NOT autosave.
+
+
+Comments
+    Only for human-readable text.
+
+    ; This is a single-line comment
+    #|
+    This
+    is
+    a multiline comment.
+    |#
+
+
+The functions in Racket are (formally) called procedures
+    What is the difference between a procedure and a method?
+        ???
+
+
+What is a predicate?
+    ???
+
+
+Types of Evaluation Processes
+   Linearly Recursive
+        1. The result is stored in a recursive tail.
+        2. The recursive call is part of an expression.
+
+   Linearly Iterative
+        1. The result is stored as a variable that is set by ANOTHER function.
+        Often the variable is named "result" and the function - "helper".
+        2. The recursive call is not part of an expression.
+        These processes are faster than the linearly recursive ones!
+
+
+What is a declaration and what is a definition?
+    int add(const int x, const int y)       <-- ???
+    {                                       <-- ???
+        return x + y;                       <-- ???
+    }                                       <-- ???
+
+
+Built-in data types
+    - boolean: #t #f
+    - numbers: 1, 1.5, 2+3i
+    - strings: "hello"
+    - Pairs: '(1 . 2)
+    - Lists: '(1 2 3 4 5)
+    - conventions for identifiers:
+        - myProgram vs. my_program vs. my-program (Kebab Case 😄)
+        - predicate => suffix "?"
+
+
+Procedures
+    display
+        - prints something on console
+        - (display "Hello, world!") -> Hello, world!
+    = 
+        - check equality between numbers
+        - (= 5 5) -> #t
+        - (= 5 -5) -> #f
+    (add1 x), (sub1 x): analogous to (+ x 1) and (- x 1)
+    equal?
+        - check for equality if arguments are not numbers
+        - (equal? "Hello" "He") -> #f
+        - (equal? 5 "He") -> #f
+    boolean operators: not, and, or
+        - (and #t #f) -> #f
+        - (not #t) -> #f
+    /
+        - division between numbers
+        - (/ 10 5) -> 2
+        - (/ 10.0 7.0) -> 1.4285714285714286
+    quotient
+        - returns the whole part of the division
+        - (quotient 10.0 7.0) -> 1.0
+    remainder
+        - returns the remainder of the division
+        - (remainder 123 10) -> 3
+    cond
+        - The equivalent of the "switch" case in C++.
+        - Used to define guards.
+        - Example:
+            (define (f x)
+				(cond
+					[(= x 10) "x is 10"]
+					[(even? x) "x is not 10 but is even"]
+					[else "x is not 10 and is not even"]
+					)
+            )
+
+            (f 10) ; -> x is 10
+            (f 5) ; -> x is not 10 and is not even
+            (f 6) ; -> x is not 10 but is even
+    expt
+        - the power operator
+        - (expt 2 10) -> 1024
+    min, max, +, -, *, <, <=, ...
+        - NOTE: They work with more than two numbers also!
+        - (max 1 2 3 4 5) -> 5
+        - (<= 1 2 3 4 5) -> #t
+    (if <boolean_cond>  <= Notice the line breaks!
+        <code if true>  <= Notice the line breaks!
+        <code if false> <= Notice the line breaks!
+        )
+
+
+Key words to watch out for in an exam
+    - естествено
+    - неотрицателно
+    - неположително
+    - положително
+    - индекс
+    - ...
+
+
+Nested procedures
+    - Will more than one procedure use it?
+        - Yes => global
+        - No => nested
+
+
+The hello world procedure:
+
+#lang racket    <--- Should always be there
+
+(display "Hello, world!")
+^                       ^
+|                       |
+|                       |
+Do not forget the parenthesis (procedure <=> parenthesis) !
+
+
+
+###################################################################################################
+# Week_02 - Recursion (part 2)
+###################################################################################################
+
+Importing libraries:
+    #import ... (in C++) => (require ...) (in Racket)
+	(require math/number-theory) ; API: https://docs.racket-lang.org/math/number-theory.html
+	(require racket/trace) ; see what arguments a procedure gets when it is called
+
+Procedures:
+	(divides? d n): Whether d divides n with remainder=0.
+		(divides? 5 25) -> #t ; How would you implement it? Answer: (zero? (reminder 25 5))
+		(divides? 5 19) -> #f
+		(divides? 10 66) -> #f
+		(divides? 10 100) -> #t
+    (divisor-sum n): The sum of the divisors of a number.
+        (divisor-sum 6) -> 12 (1 + 2 + 3 + 6)
+	(prime? n): Whether n is a prime number.
+	(prime-divisors n): Get a list of all the prime divisors of a number.
+	(even? n): Whether n is an even number.
+	(odd? n): Whether n is an odd number.
+	(factorial n): Get the factorial of a number.
+	(trace <f-name>): See what calculations happen where. VERY USEFUL FOR DEBUGGING!
+
+
+
+###################################################################################################
+# Week_04 - Lambda Expressions
+###################################################################################################
+
+General
+	procedures without a name (anonymous)
+		called "arrow functions" in JS, TS, etc (Frontend Languages and Frameworks)
+		in 💓 Python3 💓 : lambda x : x + 1
+		in    C++        : [](const int x) { return x + 1; } (if interested: https://www.youtube.com/watch?v=mWgmBBz0y8c)
+		in    Racket     : (λ (x) (add1 x))
+		in    Haskell    : (\ x -> x + 1)
+
+	have four parts
+		brackets
+		the lambda symbol ; in DrRacket use Cntr + \ or lambda
+		sequence of parameters (separated by SPACE)
+		a procedure to be executed over those parameters
+	    	(λ (<parameters>) (<procedure>))
+
+	a lambda that adds 5 to a number: ???
+		how would a test look like? ???
+
+	a lambda-predicate that checks whether a number is greater than 10: ???
+		how would a test look like? ???
+
+	a lambda which adds three numbers: ???
+		how would a test look like? ???
+
+	What is an unary procedure? ???
+		examples: ???
+	
+    What is a binary procedure? ???
+		examples: ???
+
+Function Composition
+	Composition of f and g over x: ???
+
+Partial Application
+	1. Take an n-argument procedure f (n > 1).
+	2. Apply it to m arguments (m < n).
+	3. Return a procedure that takes (n - m) arguments.
+	Done! You have just applied f partially to m arguments. The result is a procedure!!
+    Currying:
+        When you keep applying f only to m=1 arguments until all of them are supplied.
+
+Higher order procedure
+	A procedure that accepts at least one procedure as a parameter and/or returns a procedure.
+    Procedures can be passed to other procedures just like a normal type (numbers, strings, vectors, arrays, etc.).
+        That is why they are called "first class citizens" in JS.
+
+What will the following produce?
+	((λ (x y z) (string-append x y z)) "This" " is " "Racket!")
+	((λ (x y z) (x y z)) (λ (x y) (+ x y)) 5 6)
+
+Applicative and normal order evaluation
+    In applicative order execution, all procedure arguments are evaluated before applying the procedure. In normal order execution, procedure arguments are evaluated after applying the procedure, and then only if the result is needed to complete the evaluation of the procedure.
+
+    What type of evaluation does C++ have? applicative
+    What type of evaluation does Racket have? applicative
+    What type of evaluation does Haskell have? normal
+
+
+
+###################################################################################################
+# Week_05 - Lists
+###################################################################################################
+	
+Strings
+	API: https://docs.racket-lang.org/reference/strings.html#%28def._%28%28quote._~23~25kernel%29._string%29%29
+	string-length, string-append, string<?, string=?, string>?, substring str start [end], string-upcase
+
+General
+	API: https://docs.racket-lang.org/reference/pairs.html
+
+	the list is a singly linked list
+
+	naming convention:
+		Put a suffix 's' at the end of identifiers.
+		For example, if we wanted to save '(1 2) in a parameter,
+			we would name the it xs
+			and read it 'exes' (strangely enough).
+		Read the following: ys.
+
+Built-in procedures
+	constructing a list
+		- (list 1 2 3 4 5 6)
+		- '(1 2 3 4 5 6)
+		- (cons 1 '()) ; short for construct
+		    - (cons 2 (cons 1 '()))
+		    - '(1 . (2 . (3 . ())))
+		    - if the second parameter is not a list, the result is a pair
+                - '(1 . 2)
+                - (list? '(1 . 2)) ; #f
+                - (pair? '(1 . 2)) ; #t
+
+	check whether a list is empty
+		(null? xs)
+		(empty? xs)
+		(equal? xs '())
+		(cons? xs)
+
+	getting the ith element of a list (analog with a train)
+		!!! Must have a check to ensure validity of index !!!
+
+		first element (the locomotive ???)
+		    (first xs) ; first '(1 2 3) => 1
+		    (car xs) ; car '(1 2 3) => 1
+		  
+		last element
+		    (last xs) ; last '(1 2 3) => 3
+
+		second element
+		    (second xs) ; second '(1 2 3) => 2
+
+		third, fourth .. tenth
+
+		the ith element
+		    (list-ref xs i) ; list-ref '(1 2 3 4) 2 => 3
+
+		get all the wagons of the train
+		    (cdr xs) ; cdr '(1 2 3 4 5 6) => '(2 3 4 5 6)
+		    pronounced “could-er"
+
+		CCCC: Car and Cdr Complete Chaos
+		    '(1 (2 3 45))
+			get 1        : (??? '(1 (2 3 45)))
+			get '(2 3 45): (??? '(1 (2 3 45)))
+			get 2        : (??? '(1 (2 3 45)))
+
+	(length xs) ; find the length (i.e. the number of elements)
+		length '("we" 2 "can" 5.26 "have multiple types" #f) => 6
+		    Advice: use lists as if they were homogeneous
+			        else you won't be able to use some procedures: sort, map, filter, etc.
+
+	(member x xs) ; is an element in a list
+	    returns #f => it is not in xs
+	    returns a list (the element + everything until the end) => it is in xs
+		usually used with (list? )
+	    (member 1 '(16 2 3 4)) -> #f
+	    (member 1 '(14 2 1 4)) -> '(1 4)
+		(list? (member 1 '(14 2 1 4))) -> #t
+	    (member 1 '(1 2 3 4)) -> '(1 2 3 4)
+
+	(reverse xs) ; reverse the contents of a list
+		reverse '(1 2 3) => '(3 2 1)
+
+	(append xs ys ...) ; combine the elements of n lists
+		(append '(1 2 3) '(4 5 6) '(7 8 9) '(10 11 12) '(13)) => '(1 2 3 4 5 6 7 8 9 10 11 12 13)
+
+	(sort xs p?) ; sort the elements of a list
+		p? is a binary predicate
+		(sort '(1 3 2) >) => '(3 2 1)
+
+	(flatten xss) ; reduces any sublists to a single list
+		(flatten '(1 2 (3 4 5) (6 (7 (8))))) -> '(1 2 3 4 5 6 7 8)
+		
+	(remove-duplicates xs) ; does what its name suggests
+		(remove-duplicates '(1 2 3 1 2 3 4 1 2 3 41 2 3 56)) -> '(1 2 3 4 41 56)
+
+    remove and remove*
+        (remq el xs) ; remove the first occurrence of el in xs by going from left to right
+            (remq 1 '(2 1 1)) -> '(2 1)
+        (remq* ys xs) ; removes all elements in xs from ys
+            (remq* '(1) '(1 2 3 1))     -> '(2 3)
+            (remq* '(1 2 3) '(1 2 3 1)) -> '()
+		remq and remq* use eq? to compare ("shallow check")
+			good enough to remove elements from lists with a single dimension / atomic contents.
+        remove and remove* use equal? to compare elements ("deep check")
+			!! Always use remove and remove* !!
+		Examples
+			(remq '(1 . 2) '((1 . 2) (4 . 5)))                     ; -> '((1 . 2) (4 . 5))
+			(remove '(1 . 2) '((1 . 2) (4 . 5)))                   ; -> '((4 . 5))
+			(remq* (list (cons 1 2)) '((1 . 2) (4 . 5) (1 . 2)))   ; -> '((1 . 2) (4 . 5) (1 . 2))
+			(remove* (list (cons 1 2)) '((1 . 2) (4 . 5) (1 . 2))) ; -> '((4 . 5))
+
+	(map f xs) ; apply f to every element of xs 
+		f must be a unary procedure
+		(map (λ (x) (* x 2)) '(1 2 3 4 5)) -> '(2 4 6 8 10)
+
+	(apply f xs) ; apply f to all element of xs
+		f must take (length xs) arguments
+		(apply + '(1 2 3 4 5)) -> 15
+
+	(filter p? xs) ; return the elements that satisfy p?
+		p? has to be unary
+		(filter even? '(1 2 3 4 5)) -> '(2 4)
+		(filter (λ (x) (divides? 3 x)) '(0 1 2 3 4 5 6)) -> '(0 3 6)
+		(filter (curry divides? 3) '(0 1 2 3 4 5 6)) -> '(0 3 6)
+
+	(range x y [step]) ; constructs a list having the elements in the interval [x, y)
+		(range 5 10) -> '(5 6 7 8 9)
+		(range 5 10 2) -> '(5 7 9)
+
+    (combinations xs [size]) ; construct possible combinations
+        (combinations '(1 2 3)) => '(() (1) (2) (1 2) (3) (1 3) (2 3) (1 2 3))
+        (combinations '(1 2 3) 2) => '((1 2) (1 3) (2 3))
+
+	foldl, foldr ; reduce a list to a single value
+		(fold(r|l) <binary-proc> <init-val> <xs>)
+		l => Start from the LEFT side of xs.
+		r => Start from the RIGHT side of xs.
+		<binary-proc>:
+			first parameter is an element from (right side | left side) of xs
+			second parameter is called the result / the accumulator / the initial value.
+		Examples
+            (foldr (λ (x acc) (and x acc)) #f '(#t #t #t #t #t)) -> #f
+		    (foldl (λ (x acc) (+ x acc)) 0 '(1 2 3 4 5))         -> 15
+		Returns the product of all numbers in the list: '(1 2 3 4 5).
+			(foldl (λ (x acc) (* x acc)) 1 '(1 2 3 4 5))
+		Find the sum and product of those numbers using another HOF
+            product: (apply * '(1 2 3 4 5))
+            sum: (apply + '(1 2 3 4 5))
+
+
+
+###################################################################################################
+# Week_06 - Pairs. Association Lists
+###################################################################################################
+
+Pairs and association lists
+	Pairs
+		analogy with std::pair<T1, T2>
+		'(<value1> . <value2>)
+
+		How to construct?
+			(cons 1 2)
+			(cons 1 2 3) ; error, because pairs contain only two elements
+			(cons "banana" "split") ; -> '("banana" . "split")
+			Note: '(1 . 2) is a pair, but '(1 . (2)) is a list
+
+		car = first element; cdr = second element
+
+		can be used to form a list of pairs
+			(list '(1 . 2) '(1 . 5) '(5 . 1))
+
+	Associative list (when life gives you lists and pairs, you make an associative list)
+		the dict() in Python
+		hash maps
+			used for making key-value pairs
+			a list of pairs where one of the values (typically the first) is unique (has the role of a key)
+		(list '(1 . "One") '(2 . "Two") '(3 . "Three"))
+		(assoc el xs) ; returns the first PAIR (from left to right) that has "el" as key
+					OR #f if there is no such element
+			(assoc 1 '((1 . 2) (2 . 3) (1 . 42))) ; -> '(1 . 2)
+
+
+Higher order functions for lists
+	(ormap p? xs) ; returns true if there is at least one element from xs that satisfies p
+		(ormap even? '(1 2 3 4 5)) ; -> #t
+
+	(andmap p? xs) ; returns true if all elements from xs satisfy p
+		(andmap even? '(1 2 3 4 5))
+			What predicate would make it return the opposite result?
+				(andmap (λ (x) (or (even? x) (odd? x))) '(1 2 3 4 5))
+
+	(take xs n) ; return the first n elements in xs
+		(take '(1 2 3 4) 0) ; -> '()
+		(take '(1 2 3 4) 2) ; -> '(1 2)
+		(take '(1 2 3 4) 5) ; -> error
+
+	(takef xs pred?) ; return a list whose elements are taken successively from xs as long as they satisfy pred. The returned list includes up to, but not including, the first element in xs for which pred returns #f.
+	(takef '(2 4 5 8) even?) ; -> '(2 4)
+	(takef '(2 4 6 8) odd?)  ; -> '()
+
+	(drop xs n) ; remove the first n elements in xs
+		(drop '(1 2 3 4) 0) -> '(1 2 3 4)
+		(drop '(1 2 3 4) 2) -> '(3 4)'
+		(drop '(1 2 3 4) 5) -> error
+
+	(dropf xs pred?) ; remove elements in xs as long as they satisfy pred
+		(dropf '(2 2 4 8 56) even?) -> '()
