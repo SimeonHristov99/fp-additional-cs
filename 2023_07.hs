@@ -1,8 +1,9 @@
 main :: IO()
 main = do
-    print $ votes ("Ritchie","C") [b1, b2, b3]
-    print $ election [b1, b2, b3] cl
-    print $ sortResults $ election [b1, b2, b3] cl
+    print $ votes ("Ritchie","C") [b1, b2, b3] == 3
+    print $ votes ("RitchieL","C") [b1, b2, b3] == 2
+    print $ election [b1, b2, b3] cl == [("Kernighan",2),("Ritchie",3),("Stroustrup",1),("Steele",1),("Sussman",1),("Church",2),("Curry",1)]
+    print $ (sortResults $ election [b1, b2, b3] cl) == [("Ritchie",3),("Kernighan",2),("Church",2),("Stroustrup",1),("Steele",1),("Sussman",1),("Curry",1)]
     print $ selectCouncil 2 [b1, b2, b3] cl == ["Ritchie","Kernighan"]
 
 cl = [("Kernighan","C"),("Ritchie","C"),("Stroustrup","C++"),("Steele","Scheme"),("Sussman","Scheme"),("Church","Lambda"),("Curry","Lambda")]
