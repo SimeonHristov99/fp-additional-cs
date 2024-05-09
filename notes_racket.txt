@@ -36,18 +36,6 @@ What is a predicate?
     ???
 
 
-Types of Evaluation Processes
-   Linearly Recursive
-        1. The result is stored in a recursive tail.
-        2. The recursive call is part of an expression.
-
-   Linearly Iterative
-        1. The result is stored as a variable that is set by ANOTHER function.
-        Often the variable is named "result" and the function - "helper".
-        2. The recursive call is not part of an expression.
-        These processes are faster than the linearly recursive ones!
-
-
 What is a declaration and what is a definition?
     int add(const int x, const int y)       <-- ???
     {                                       <-- ???
@@ -120,21 +108,6 @@ Procedures
         )
 
 
-Key words to watch out for in an exam
-    - естествено
-    - неотрицателно
-    - неположително
-    - положително
-    - индекс
-    - ...
-
-
-Nested procedures
-    - Will more than one procedure use it?
-        - Yes => global
-        - No => nested
-
-
 The hello world procedure:
 
 #lang racket    <--- Should always be there
@@ -148,7 +121,7 @@ Do not forget the parenthesis (procedure <=> parenthesis) !
 
 
 ###################################################################################################
-# Week_02 - Recursion (part 2)
+# The "math/number-theory" and "racket/trace" libraries
 ###################################################################################################
 
 Importing libraries:
@@ -158,7 +131,7 @@ Importing libraries:
 
 Procedures:
 	(divides? d n): Whether d divides n with remainder=0.
-		(divides? 5 25) -> #t ; How would you implement it? Answer: (zero? (reminder 25 5))
+		(divides? 5 25) -> #t ; How would you implement it? Answer: ???
 		(divides? 5 19) -> #f
 		(divides? 10 66) -> #f
 		(divides? 10 100) -> #t
@@ -174,7 +147,7 @@ Procedures:
 
 
 ###################################################################################################
-# Week_04 - Lambda Expressions
+# Lambda Expressions
 ###################################################################################################
 
 General
@@ -227,17 +200,9 @@ What will the following produce?
 	((λ (x y z) (string-append x y z)) "This" " is " "Racket!")
 	((λ (x y z) (x y z)) (λ (x y) (+ x y)) 5 6)
 
-Applicative and normal order evaluation
-    In applicative order execution, all procedure arguments are evaluated before applying the procedure. In normal order execution, procedure arguments are evaluated after applying the procedure, and then only if the result is needed to complete the evaluation of the procedure.
-
-    What type of evaluation does C++ have? applicative
-    What type of evaluation does Racket have? applicative
-    What type of evaluation does Haskell have? normal
-
-
 
 ###################################################################################################
-# Week_05 - Lists
+# Lists
 ###################################################################################################
 	
 Strings
@@ -252,7 +217,7 @@ General
 	naming convention:
 		Put a suffix 's' at the end of identifiers.
 		For example, if we wanted to save '(1 2) in a parameter,
-			we would name the it xs
+			we would name the it "xs"
 			and read it 'exes' (strangely enough).
 		Read the following: ys.
 
@@ -277,23 +242,23 @@ Built-in procedures
 	getting the ith element of a list (analog with a train)
 		!!! Must have a check to ensure validity of index !!!
 
-		first element (the locomotive ???)
-		    (first xs) ; first '(1 2 3) => 1
-		    (car xs) ; car '(1 2 3) => 1
+		first element
+		    (car xs) ; car '(1 2 3) => ???
+		    (first xs) ; first '(1 2 3) => ???
 		  
 		last element
-		    (last xs) ; last '(1 2 3) => 3
+		    (last xs) ; last '(1 2 3) => ???
 
 		second element
-		    (second xs) ; second '(1 2 3) => 2
+		    (second xs) ; second '(1 2 3) => ???
 
 		third, fourth .. tenth
 
 		the ith element
-		    (list-ref xs i) ; list-ref '(1 2 3 4) 2 => 3
+		    (list-ref xs i) ; list-ref '(1 2 3 4) 2 => ???
 
 		get all the wagons of the train
-		    (cdr xs) ; cdr '(1 2 3 4 5 6) => '(2 3 4 5 6)
+		    (cdr xs) ; cdr '(1 2 3 4 5 6) => ???
 		    pronounced “could-er"
 
 		CCCC: Car and Cdr Complete Chaos
@@ -303,18 +268,18 @@ Built-in procedures
 			get 2        : (??? '(1 (2 3 45)))
 
 	(length xs) ; find the length (i.e. the number of elements)
-		length '("we" 2 "can" 5.26 "have multiple types" #f) => 6
+		length '("we" 2 "can" 5.26 "have multiple types" #f) => ???
 		    Advice: use lists as if they were homogeneous
-			        else you won't be able to use some procedures: sort, map, filter, etc.
+			        otherwise you won't be able to use some procedures: sort, map, filter, etc.
 
 	(member x xs) ; is an element in a list
 	    returns #f => it is not in xs
 	    returns a list (the element + everything until the end) => it is in xs
 		usually used with (list? )
-	    (member 1 '(16 2 3 4)) -> #f
-	    (member 1 '(14 2 1 4)) -> '(1 4)
-		(list? (member 1 '(14 2 1 4))) -> #t
-	    (member 1 '(1 2 3 4)) -> '(1 2 3 4)
+	    (member 1 '(16 2 3 4)) -> ???
+	    (member 1 '(14 2 1 4)) -> ???
+		(list? (member 1 '(14 2 1 4))) -> ???
+	    (member 1 '(1 2 3 4)) -> ???
 
 	(reverse xs) ; reverse the contents of a list
 		reverse '(1 2 3) => '(3 2 1)
@@ -389,7 +354,7 @@ Built-in procedures
 
 
 ###################################################################################################
-# Week_06 - Pairs. Association Lists
+# Pairs. Association Lists
 ###################################################################################################
 
 Pairs and association lists
@@ -416,31 +381,31 @@ Pairs and association lists
 		(list '(1 . "One") '(2 . "Two") '(3 . "Three"))
 		(assoc el xs) ; returns the first PAIR (from left to right) that has "el" as key
 					OR #f if there is no such element
-			(assoc 1 '((1 . 2) (2 . 3) (1 . 42))) ; -> '(1 . 2)
+			(assoc 1 '((1 . 2) (2 . 3) (1 . 42))) ; -> ???
 
 
 Higher order functions for lists
 	(ormap p? xs) ; returns true if there is at least one element from xs that satisfies p
-		(ormap even? '(1 2 3 4 5)) ; -> #t
+		(ormap even? '(1 2 3 4 5)) ; -> ???
 
 	(andmap p? xs) ; returns true if all elements from xs satisfy p
-		(andmap even? '(1 2 3 4 5))
+		(andmap even? '(1 2 3 4 5)) ; -> ???
 			What predicate would make it return the opposite result?
-				(andmap (λ (x) (or (even? x) (odd? x))) '(1 2 3 4 5))
+				???
 
 	(take xs n) ; return the first n elements in xs
-		(take '(1 2 3 4) 0) ; -> '()
-		(take '(1 2 3 4) 2) ; -> '(1 2)
-		(take '(1 2 3 4) 5) ; -> error
+		(take '(1 2 3 4) 0) ; -> ???
+		(take '(1 2 3 4) 2) ; -> ???
+		(take '(1 2 3 4) 5) ; -> ???
 
 	(takef xs pred?) ; return a list whose elements are taken successively from xs as long as they satisfy pred. The returned list includes up to, but not including, the first element in xs for which pred returns #f.
-	(takef '(2 4 5 8) even?) ; -> '(2 4)
-	(takef '(2 4 6 8) odd?)  ; -> '()
+	(takef '(2 4 5 8) even?) ; -> ???
+	(takef '(2 4 6 8) odd?)  ; -> ???
 
 	(drop xs n) ; remove the first n elements in xs
-		(drop '(1 2 3 4) 0) -> '(1 2 3 4)
-		(drop '(1 2 3 4) 2) -> '(3 4)'
-		(drop '(1 2 3 4) 5) -> error
+		(drop '(1 2 3 4) 0) -> ???
+		(drop '(1 2 3 4) 2) -> ???
+		(drop '(1 2 3 4) 5) -> ???
 
 	(dropf xs pred?) ; remove elements in xs as long as they satisfy pred
-		(dropf '(2 2 4 8 56) even?) -> '()
+		(dropf '(2 2 4 8 56) even?) -> ???
