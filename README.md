@@ -72,8 +72,6 @@ Test cases for `Racket`:
 
 (= (remove-last-digit 154) 15)
 
-(= (div-real 154 10) 15.4)
-
 (= (average-whole 5 1542) 773.5)
 
 (= (round-two-dig pi) 3.14)
