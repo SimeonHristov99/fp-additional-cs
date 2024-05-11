@@ -8,10 +8,7 @@ bF 2 = 10
 bF n = 8
 
 recommended basket bestFit products =
-    ???
-    (\ product ->
-        ???)
-    (??? basket)
+    filter (\ product -> notElem product basket && findPrice product <= basketCost) (map bestFit basket)
  where
-     findPrice product = ??? products ???
-     basketCost = ??? basket ???
+     findPrice product = head [price | (id, price) <- products, id == product]
+     basketCost = sum [findPrice prodId | prodId <- basket]
