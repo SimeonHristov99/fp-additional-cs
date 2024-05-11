@@ -6,11 +6,11 @@
 2. `notes_haskell.txt`, solve warmup tasks in Haskell, 15 minute break.
 3. (iterate till 5 hours) solve 5 tasks from finals, 15 minute break.
 
-## Source of tasks
+## Resources
+
+### Source of tasks
 
 <https://www.fmi.uni-sofia.bg/bg/node/7349>
-
-## Resources
 
 ### Functional Programming
 
