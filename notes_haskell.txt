@@ -52,7 +52,7 @@ Built-in Functions
  
  - division:
     - for whole numbers:
-        - quotient: div (ex. div 10 5 == 2; div 123 10 == 12)
+        - quotient: div (ex. div 10 5 == 2; div 123 10 == 12) 10 `div` 5
         - remainder: mod (ex. mod 10 5 == 0; mod 123 10 == 3) (equivalent to % in C++)
     - real numbers:
         - use only "/" (equivalent to "/" in C++, but here it cannot be used for whole numbers)
@@ -136,28 +136,28 @@ Useful built-in functions
 
     - first element (the locomotive)
         - (x:xs) => x is the first element
-        - head [1, 2, 3] => ???
+        - head [1, 2, 3] => 1
 
     - last element
-        - last [1, 2, 3, 4] => ???
+        - last [1, 2, 3, 4] => 4
 
     - all but the last element
-        - init [1 .. 5] = ???
+        - init [1 .. 5] = [1, 2, 3, 4]
 
     - get all the wagons of the train
         - (x:xs) => xs is the tail
-        - tail [1, 2, 3] => ???
-        - tail [1 .. 5]  => ???
+        - tail [1, 2, 3] => [2, 3]
+        - tail [1 .. 5]  => [2 .. 5]
 
     - the ith element
         - xs!!5 => The element at INDEX 5 (ex. [1, 2, 3, 4, 5, 6]!!5 == 6)
-        - [1 .. 5]!!3 = ???
+        - [1 .. 5]!!3 = 4
 
  - is an element in a list?
     - elem x xs
-        - elem 1 [16, 2, 3, 4] => ???
-        - elem 1 [14, 2, 1, 4] => ???
-        - elem 1 [1, 2, 3, 4]  => ???
+        - elem 1 [16, 2, 3, 4] => False
+        - elem 1 [14, 2, 1, 4] => True
+        - elem 1 [1, 2, 3, 4]  => True
 
  - combine the elements of lists
     - [1, 2, 3] ++ [4, 5, 6] => [1, 2, 3, 4, 5, 6]
@@ -206,7 +206,7 @@ List Comprehension - Another Way Of Constructing Lists
  - [1 .. 6]                                    => ???
  - [1, 3 .. 6]                                 => ???
  - [ x + 10 | x <- [1 .. 6]]                   => ???
- - [ x | x <- [1 .. 6], even x]                => ???
+ - [ x | x <- [1 .. 6], even x]                => [2, 4, 6]
  - [ x | x <- [1 .. 6], mod x 3 == 0 && x > 3] => ???
  - [ x | x <- [1 .. 6], mod x 3 == 0, x > 3]   => ???
 
@@ -217,8 +217,8 @@ Higher order function
     Lambda function:
     (\ x -> f x)
 
-    - map    (\ x -> x + 10)         [1 .. 3]     => ??? (eqiv. map (+10) [1 .. 3])
-    - filter (\ x -> even x)         [1 .. 3]     => ??? (eqiv. filter even [1 .. 3])
+    - map    (\ x -> x + 10)         [1 .. 3]     => [11, 12, 13] (eqiv. map (+10) [1 .. 3])
+    - filter (\ x -> even x)         [1 .. 3]     => [2] (eqiv. filter even [1 .. 3])
     - all    (\ x -> odd x)          [1 .. 6]     => ???
     - all    (\ x -> even x)         [2, 4, 6]    => ???
     - any    (\ x -> odd x)          [2, 4, 6]    => ???
@@ -252,23 +252,23 @@ Lambda Expressions
       - (\ <parameters> -> <function application>)
 
    - a lambda that adds 5 to a number:
-   ???
+   (\ x -> x + 5)
 
    - a lambda-predicate that checks whether a number is greater than 10:
-   ???
+   (\ x -> x > 10)
 
    - a lambda which adds three numbers:
-   ???
+   (\ x y z -> x + y + z)
 
    - Remember: The evaluation happens from LEFT TO RIGHT.
 
    - What is the output of the following code?
-      print $ (\ x y z -> x y z) (\ x y -> x + y) 5
-      Answer: ???
+      print $ (\ x y z -> x y z) (\ x y -> x + y) 5 6
+      Answer: 11
 
 
 Function Composition
-   Composition of f and g over x           : f (g x)
+   Composition of f and g over x           : (f (g x))
    In Haskell there is an operator for this: (f . g) x
 
 

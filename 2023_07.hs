@@ -11,14 +11,17 @@ b1 (name, specialty) = specialty == "Lambda" || last name == 'e'
 b2 (name, specialty) = name == "Church" || head specialty == 'C'
 b3 (name, specialty) = length name > 6 && specialty /= "C++"
 
-votes cand ballots = ???
-election ballots cl = ??? (\ ??? -> (???, ???)) cl
+votes cand ballots = length $ filter (\ ballot -> ballot cand) ballots
+
+election ballots cl = map (\ candidate@(name, spec) -> (name, votes candidate ballots)) cl
+
 sortResults [] = []
-sortResults ??? = more ++ equal ++ less
+sortResults results@((_, lhsVotes):xs) = more ++ equal ++ less
  where
-    more  = ???
-    equal = ???
-    less  = ???
+    more  = sortResults $ filter (\ (_, rhsVotes) -> rhsVotes > lhsVotes) xs
+    equal = filter (\ (_, rhsVotes) -> rhsVotes == lhsVotes) results
+    less  = sortResults $ filter (\ (_, rhsVotes) -> rhsVotes < lhsVotes) xs
+
 selectCouncil max ballots cl =
-    ??? (map ??? (filter ??? results))
+    take max (map fst (filter (\ (_, votes) -> votes * 2 > length ballots) results))
  where results = sortResults (election ballots cl)

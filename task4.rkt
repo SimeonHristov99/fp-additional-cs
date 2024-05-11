@@ -1,6 +1,8 @@
 #lang racket
 
-
+(define (rf f g)
+  (λ (xs h) (map h (filter (λ (x) (> (f x) (g x))) xs)))
+  )
 
 (equal?
  ((rf (λ (x) (- -4 x)) (λ (x) (* x -2))) (range 1 11) (λ (x) (* x 3)))

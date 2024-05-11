@@ -29,26 +29,28 @@ Comments
 
 The functions in Racket are (formally) called procedures
     What is the difference between a procedure and a method?
-        ???
+        The produce return void.
+    What is the difference between a function and a method?
+		Method has *this.
 
 
 What is a predicate?
-    ???
+    Function that return bool.
 
 
 What is a declaration and what is a definition?
-    int add(const int x, const int y)       <-- ???
-    {                                       <-- ???
-        return x + y;                       <-- ???
-    }                                       <-- ???
+    int add(const int x, const int y)       <-- declaration
+    {                                       <-- definition
+        return x + y;                       <-- definition
+    }                                       <-- definition
 
 
 Built-in data types
     - boolean: #t #f
     - numbers: 1, 1.5, 2+3i
     - strings: "hello"
-    - Pairs: '(1 . 2)
-    - Lists: '(1 2 3 4 5)
+    - Pairs: '(1 . 2) ; (pair 1 2)
+    - Lists: '(1 2 3 4 5) ; (list 1 2 3 4 5)
     - conventions for identifiers:
         - myProgram vs. my_program vs. my-program (Kebab Case 😄)
         - predicate => suffix "?"
@@ -131,7 +133,7 @@ Importing libraries:
 
 Procedures:
 	(divides? d n): Whether d divides n with remainder=0.
-		(divides? 5 25) -> #t ; How would you implement it? Answer: ???
+		(divides? 5 25) -> #t ; How would you implement it? Answer: (= (remainder 25 5) 0)
 		(divides? 5 19) -> #f
 		(divides? 10 66) -> #f
 		(divides? 10 100) -> #t
@@ -155,7 +157,7 @@ General
 		called "arrow functions" in JS, TS, etc (Frontend Languages and Frameworks)
 		in 💓 Python3 💓 : lambda x : x + 1
 		in    C++        : [](const int x) { return x + 1; } (if interested: https://www.youtube.com/watch?v=mWgmBBz0y8c)
-		in    Racket     : (λ (x) (add1 x))
+		in    Racket     : (λ (x) (add1 x)) ; (lambda (x) (add1 x))
 		in    Haskell    : (\ x -> x + 1)
 
 	have four parts
@@ -165,23 +167,23 @@ General
 		a procedure to be executed over those parameters
 	    	(λ (<parameters>) (<procedure>))
 
-	a lambda that adds 5 to a number: ???
-		how would a test look like? ???
+	a lambda that adds 5 to a number: (lambda (x) (+ 5 x))
+		how would a test look like? ((lambda (x) (+ 5 x)) 10)
 
 	a lambda-predicate that checks whether a number is greater than 10: ???
-		how would a test look like? ???
+		how would a test look like? ((lambda (x) (> x 100)) 100)
 
-	a lambda which adds three numbers: ???
-		how would a test look like? ???
+	a lambda which adds three numbers: (lambda (x y z) (+ x y z))
+		how would a test look like? ((lambda (x y z) (+ x y z)) 1 2 3)
 
-	What is an unary procedure? ???
-		examples: ???
+	What is an unary procedure? Accepts one argument.
+		examples: not, even?, prime?
 	
-    What is a binary procedure? ???
-		examples: ???
+    What is a binary procedure? Accepts two arguments.
+		examples: equal?, eq?, reminder
 
 Function Composition
-	Composition of f and g over x: ???
+	Composition of f and g over x: (f (g x))
 
 Partial Application
 	1. Take an n-argument procedure f (n > 1).
@@ -243,32 +245,32 @@ Built-in procedures
 		!!! Must have a check to ensure validity of index !!!
 
 		first element
-		    (car xs) ; car '(1 2 3) => ???
-		    (first xs) ; first '(1 2 3) => ???
+		    (car xs) ; car '(1 2 3) => 1
+		    (first xs) ; first '(1 2 3) => 1
 		  
 		last element
-		    (last xs) ; last '(1 2 3) => ???
+		    (last xs) ; last '(1 2 3) => 3
 
 		second element
-		    (second xs) ; second '(1 2 3) => ???
+		    (second xs) ; second '(1 2 3) => 2
 
 		third, fourth .. tenth
 
 		the ith element
-		    (list-ref xs i) ; list-ref '(1 2 3 4) 2 => ???
+		    (list-ref xs i) ; (list-ref '(1 2 3 4) 2) => 3
 
 		get all the wagons of the train
-		    (cdr xs) ; cdr '(1 2 3 4 5 6) => ???
+		    (cdr xs) ; cdr '(1 2 3 4 5 6) => '(2 3 4 5 6)
 		    pronounced “could-er"
 
 		CCCC: Car and Cdr Complete Chaos
 		    '(1 (2 3 45))
-			get 1        : (??? '(1 (2 3 45)))
-			get '(2 3 45): (??? '(1 (2 3 45)))
-			get 2        : (??? '(1 (2 3 45)))
+			get 1        : (car '(1 (2 3 45)))
+			get '(2 3 45): (cadr '(1 (2 3 45)))
+			get 2        : (caadr '(1 (2 3 45))
 
 	(length xs) ; find the length (i.e. the number of elements)
-		length '("we" 2 "can" 5.26 "have multiple types" #f) => ???
+		length '("we" 2 "can" 5.26 "have multiple types" #f) => 6
 		    Advice: use lists as if they were homogeneous
 			        otherwise you won't be able to use some procedures: sort, map, filter, etc.
 
@@ -276,10 +278,10 @@ Built-in procedures
 	    returns #f => it is not in xs
 	    returns a list (the element + everything until the end) => it is in xs
 		usually used with (list? )
-	    (member 1 '(16 2 3 4)) -> ???
-	    (member 1 '(14 2 1 4)) -> ???
-		(list? (member 1 '(14 2 1 4))) -> ???
-	    (member 1 '(1 2 3 4)) -> ???
+	    (member 1 '(16 2 3 4)) -> #f
+	    (member 1 '(14 2 1 4)) -> '(1 4)
+		(list? (member 1 '(14 2 1 4))) -> #t
+	    (member 1 '(1 2 3 4)) -> '(1 2 3 4)
 
 	(reverse xs) ; reverse the contents of a list
 		reverse '(1 2 3) => '(3 2 1)
@@ -381,26 +383,24 @@ Pairs and association lists
 		(list '(1 . "One") '(2 . "Two") '(3 . "Three"))
 		(assoc el xs) ; returns the first PAIR (from left to right) that has "el" as key
 					OR #f if there is no such element
-			(assoc 1 '((1 . 2) (2 . 3) (1 . 42))) ; -> ???
+			(assoc 1 '((1 . 2) (2 . 3) (1 . 42))) ; -> '(1 . 2)
 
 
 Higher order functions for lists
 	(ormap p? xs) ; returns true if there is at least one element from xs that satisfies p
-		(ormap even? '(1 2 3 4 5)) ; -> ???
+		(ormap even? '(1 2 3 4 5)) ; -> #t
 
 	(andmap p? xs) ; returns true if all elements from xs satisfy p
-		(andmap even? '(1 2 3 4 5)) ; -> ???
-			What predicate would make it return the opposite result?
-				???
+		(andmap even? '(1 2 3 4 5)) ; -> #f
 
 	(take xs n) ; return the first n elements in xs
-		(take '(1 2 3 4) 0) ; -> ???
-		(take '(1 2 3 4) 2) ; -> ???
-		(take '(1 2 3 4) 5) ; -> ???
+		(take '(1 2 3 4) 0) ; -> '()
+		(take '(1 2 3 4) 2) ; -> '(1 2)
+		(take '(1 2 3 4) 5) ; -> error
 
 	(takef xs pred?) ; return a list whose elements are taken successively from xs as long as they satisfy pred. The returned list includes up to, but not including, the first element in xs for which pred returns #f.
-	(takef '(2 4 5 8) even?) ; -> ???
-	(takef '(2 4 6 8) odd?)  ; -> ???
+	(takef '(2 4 5 8) even?) ; -> '(2 4)
+	(takef '(2 4 6 8) odd?)  ; -> '()
 
 	(drop xs n) ; remove the first n elements in xs
 		(drop '(1 2 3 4) 0) -> ???
@@ -408,4 +408,4 @@ Higher order functions for lists
 		(drop '(1 2 3 4) 5) -> ???
 
 	(dropf xs pred?) ; remove elements in xs as long as they satisfy pred
-		(dropf '(2 2 4 8 56) even?) -> ???
+		(dropf '(2 2 4 8 56) even?) -> '()

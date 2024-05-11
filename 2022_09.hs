@@ -14,18 +14,22 @@ main = do
         T 4 [T 5 []],
         T 7 [T 8 [], T 9 [T 10 []]]]
 
-leaf ???
-twig ???
-stick ???
-???
+leaf (T _ children) = null children -- null . subtrees
+twig (T _ children) = all leaf children
+stick (T _ children) = length children < 2
+    && all stick children
 
-trim (T x ts) = T x ???
-                    ???
+trim (T x ts) = T x (map trim
+    $ filter (not . twig) ts)
                     
-prune t@(T x []) = ???
+prune t@(T x []) = t
 prune t@(T x ts) = T x (if stick t
-                        then ???
-                        else ???)
+                        then [(T child []) | (T child _) <- ts]
+                        else map prune ts)
+
+isBST tree = let nodes = traverseDFS tree in nodes == sort nodes
+isBSTWhere tree = nodes == sort nodes
+ where nodes = traverseDFS tree
 
 data Tree = T { root :: Int, subtrees :: [Tree] }
  deriving (Show, Eq)
